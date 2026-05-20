@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fútbol Premier</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav>
+
+        <div class="logo">
+
+    <img
+        src="img/logo.png"
+        alt="Fútbol Premier"
+    >
+
+</div>
+
+        <ul>
+            <li>Inicio</li>
+            <li>Clubes</li>
+            <li>Retro</li>
+            <li>Selecciones</li>
+        </ul>
+
+        <input
+            type="text"
+            id="buscador"
+            placeholder="Buscar jersey..."
+        >
+
+        <div class="carrito-icono">
+
+            🛒 <span id="contador-carrito">0</span>
+
+        </div>
+
+    </nav>
+
+    <!-- PANEL CARRITO -->
+
+    <div class="carrito-panel" id="carrito-panel">
+
+    <div class="carrito-header">
+
+        <h2>Carrito</h2>
+
+        <span id="cerrar-carrito">
+            ✕
+        </span>
+
+    </div>
+
+        <h2>Carrito</h2>
+
+        <div id="items-carrito"></div>
+
+        <div class="carrito-footer">
+
+            <h3>
+                Total: <span id="total">0</span> Bs
+            </h3>
+
+            <button id="finalizar-compra">
+                Finalizar Pedido
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                FÚTBOL PREMIER
+            </h1>
+
+            <p>
+                Jerseys Originales y Retro
+            </p>
+
+            <a href="#catalogo">
+                VER CATÁLOGO
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- PRODUCTO DESTACADO -->
+
+<section class="destacado">
+
+    <div class="destacado-img">
+
+        <img
+            src="WhatsApp Image 2026-05-18 at 8.21.49 PM.jpeg"
+            alt=""
+        >
+
+    </div>
+
+    <div class="destacado-info">
+
+        <span>
+            🔥 PRODUCTO DESTACADO
+        </span>
+
+        <h2>
+            Manchester United 2008
+        </h2>
+
+        <p>
+            Temporada histórica de Cristiano Ronaldo.
+            Calidad retro version jugador.
+        </p>
+
+        <h3>
+            330 Bs
+        </h3>
+
+        <a href="#catalogo">
+            Comprar Ahora
+        </a>
+
+    </div>
+
+</section>
+
+    <!-- FILTROS -->
+
+    <section class="filtros">
+
+        <button onclick="filtrarCategoria('todos')">
+            Todos
+        </button>
+
+        <button onclick="filtrarCategoria('clubes')">
+            Clubes
+        </button>
+
+        <button onclick="filtrarCategoria('retro')">
+            Retro
+        </button>
+
+        <button onclick="filtrarCategoria('selecciones')">
+            Selecciones
+        </button>
+
+        <button onclick="filtrarCategoria('player')">
+            Player Version
+        </button>
+
+    </section>
+
+    <!-- PANEL ADMIN -->
+
+    <section class="admin" id="admin-panel">
+
+        <h2>Agregar Jersey</h2>
+
+        <input
+            type="file"
+            id="imagen"
+            multiple
+        >
+
+        <input
+            type="text"
+            id="nombre"
+            placeholder="Nombre del jersey"
+        >
+
+        <input
+            type="text"
+            id="tallas"
+            placeholder="Tallas disponibles"
+        >
+
+        <input
+            type="text"
+            id="dorsales"
+            placeholder="Dorsales"
+        >
+
+        <input
+            type="text"
+            id="calidad"
+            placeholder="Calidad"
+        >
+
+        <select id="categoria">
+
+            <option value="clubes">
+                Clubes
+            </option>
+
+            <option value="retro">
+                Retro
+            </option>
+
+            <option value="selecciones">
+                Selecciones
+            </option>
+
+            <option value="player">
+                Player Version
+            </option>
+
+        </select>
+
+        <input
+            type="number"
+            id="precio"
+            placeholder="Precio"
+        >
+
+        <button onclick="agregarProducto()">
+            Agregar Jersey
+        </button>
+
+    </section>
+
+    <!-- CATÁLOGO -->
+
+    <section
+        class="catalogo"
+        id="catalogo"
+    >
+
+    </section>
+
+    <!-- MODAL -->
+
+    <div class="modal" id="modal">
+
+        <span class="cerrar">
+            &times;
+        </span>
+
+        <img
+            class="modal-img"
+            id="modal-img"
+        >
+
+    </div>
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    <div class="footer-logo">
+
+        <img
+            src="img/logo.png"
+            alt="Fútbol Premier"
+        >
+
+        <h2>
+            FÚTBOL PREMIER
+        </h2>
+
+    </div>
+
+    <p class="footer-text">
+
+        Vive el fútbol con los mejores jerseys
+        originales y retro ⚽
+
+    </p>
+
+    <div class="footer-redes">
+
+        <a
+            href="https://wa.me/59171208827"
+            target="_blank"
+        >
+            WhatsApp
+        </a>
+
+        <a href="https://www.instagram.com/futbol.premier_10?igsh=NmY4eGVhdW1ydmlz">
+            Instagram
+        </a>
+
+        <a href="https://www.tiktok.com/@ftbol_premier?_r=1&_t=ZS-96WnfVoo2ZY">
+            TikTok
+        </a>
+
+    
+
+    </div>
+
+    <p class="copy">
+
+        © 2026 Fútbol Premier - Todos los derechos reservados
+
+    </p>
+
+</footer>
+<div id="toast"></div>
+<!-- MODAL PAGO -->
+
+<div class="pago-modal" id="pago-modal">
+
+    <div class="pago-contenido">
+
+        <span id="cerrar-pago">
+            ✕
+        </span>
+
+        <h2>
+            Finalizar Compra
+        </h2>
+
+        <p class="pago-total">
+            Total:
+            <span id="total-pago">
+                0
+            </span>
+            Bs
+        </p>
+
+        <img
+            src="img/qr1.jpg"
+            class="qr-img"
+        >
+
+        <div class="datos-pago">
+
+            <h3>
+                Pago por Transferencia
+            </h3>
+
+            <p>
+                Banco: MERCANTIL SCZ
+            </p>
+
+            <p>
+                Cuenta: 1016631325
+            </p>
+
+            <p>
+                Titular: Rodrigo Franco Navia Rojas
+            </p>
+
+        </div>
+
+        <button id="enviar-whatsapp">
+
+            Ya pagué / Enviar Pedido
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- LOGIN ADMIN -->
+
+<div class="login-modal" id="login-modal">
+
+    <div class="login-box">
+
+        <h2>
+            Panel Administrador
+        </h2>
+
+        <input
+            type="password"
+            id="admin-password"
+            placeholder="Contraseña"
+        >
+
+        <button id="login-btn">
+            Ingresar
+        </button>
+
+    </div>
+
+</div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
