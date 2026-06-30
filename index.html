@@ -763,6 +763,22 @@
 <a href="https://wa.me/59171208827" target="_blank" class="whatsapp-flotante">💬</a>
 <button class="volver-arriba" id="volver-arriba">↑</button>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAXTFlKMlQ1S0rSnTNY0Ryppzsy4fuv7SY",
+    authDomain: "futbol-premier-bac87.firebaseapp.com",
+    databaseURL: "https://futbol-premier-bac87-default-rtdb.firebaseio.com",
+    projectId: "futbol-premier-bac87",
+    storageBucket: "futbol-premier-bac87.firebasestorage.app",
+    messagingSenderId: "353484365090",
+    appId: "1:353484365090:web:580c30c71e73a440fb597b"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
 <script src="script.js"></script>
 </body>
 </html>

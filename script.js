@@ -75,6 +75,25 @@ sincronizarTallasCheckbox();
 
 
 
+/* =============================================   FIREBASE SYNC PRODUCTOS   */
+if (typeof db !== "undefined") {
+    db.ref("productos").on("value", (snapshot) => {
+        const data = snapshot.val();
+        if (data && Array.isArray(data) && data.length) {
+            productos = data.filter(p => p); // por si Firebase deja huecos null
+            localStorage.setItem("productos", JSON.stringify(productos));
+            if (typeof renderProductos === "function") {
+                renderProductos(productos); renderOfertas();
+                if (typeof renderListaAdmin === "function" && adminLogueado) renderListaAdmin();
+                if (typeof renderAdminStats === "function" && adminLogueado) renderAdminStats();
+            }
+        } else if (data === null) {
+            // base de datos vacía todavía: subimos los productos iniciales una sola vez
+            db.ref("productos").set(productos);
+        }
+    });
+}
+
 /* =============================================   SPLASH   */
 window.addEventListener("load", () => {
     setTimeout(() => { const s=$("splash"); s.classList.add("splash-out"); setTimeout(()=>s.remove(),600); }, 2000);
@@ -1060,5 +1079,10 @@ function marcarMasVendido(){
 
 /* =============================================   UTILS   */
 function mostrarToast(txt){const t=$("toast");t.textContent=txt;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);}
-function guardarLS(){localStorage.setItem("productos",JSON.stringify(productos));}
+function guardarLS(){
+    localStorage.setItem("productos",JSON.stringify(productos));
+    if (typeof db !== "undefined") {
+        db.ref("productos").set(productos).catch(e=>console.error("Error guardando en Firebase:",e));
+    }
+}
 function limpiarFormulario(){["imagen","img-url","nombre","tallas","dorsales","calidad","colores","descripcion","precio","vendidos","precio-original","fin-oferta","stock"].forEach(id=>{if($(id))$(id).value="";});$("es-oferta").checked=false;$("campo-precio-original").style.display="none";}
