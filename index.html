@@ -1,395 +1,768 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-tema="oscuro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fútbol Premier</title>
-
+    <title>Fútbol Premier — Jerseys </title>
+    <meta name="description" content="Los mejores jerseys de fútbol.">
+    <meta property="og:title" content="Fútbol Premier — Jerseys Originales y Retro">
+    <meta property="og:description" content="Los mejores jerseys de fútbol.">
+    <meta property="og:image" content="img/logo.png">
+    <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <!-- NAVBAR -->
-
-    <nav>
-
-        <div class="logo">
-
-    <img
-        src="img/logo.png"
-        alt="Fútbol Premier"
-    >
-
+<!-- SPLASH -->
+<div class="splash" id="splash">
+    <div class="splash-inner">
+        <img src="img/logo.png" alt="Fútbol Premier" class="splash-logo">
+        <h1 class="splash-titulo">FÚTBOL PREMIER</h1>
+        <div class="splash-barra"><div class="splash-progreso"></div></div>
+    </div>
 </div>
 
-        <ul>
-            <li>Inicio</li>
-            <li>Clubes</li>
-            <li>Retro</li>
-            <li>Selecciones</li>
-        </ul>
+<canvas id="confeti-canvas"></canvas>
 
-        <input
-            type="text"
-            id="buscador"
-            placeholder="Buscar jersey..."
-        >
+<!-- BANNER -->
+<div class="banner-top">
+    🚀 Envíos a toda Bolivia &nbsp;|&nbsp; 🔒 Pago seguro por QR &nbsp;|&nbsp; ⚽ Jerseys Originales y Retro
+</div>
 
-        <div class="carrito-icono">
+<!-- NAVBAR -->
+<nav id="navbar">
+    <div class="logo"><img src="img/logo.png" alt="Fútbol Premier"></div>
+    <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#ofertas">Ofertas 🔥</a></li>
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#resenas">Reseñas</a></li>
+        <li><a href="#entregas">Envíos 📦</a></li>
+        <li><a href="#footer">Contacto</a></li>
+    </ul>
+    <div class="buscador-wrap">
+        <input type="text" id="buscador" placeholder="🔍 Buscar jersey..." autocomplete="off">
+        <div class="buscador-resultados" id="buscador-resultados"></div>
+    </div>
+    <div class="nav-acciones">
+        <button class="toggle-tema" id="toggle-tema">🌙</button>
+        <button class="btn-favoritos-nav" id="btn-favoritos-nav">❤️ <span id="contador-favoritos"></span></button>
+        <button id="abrir-login" class="admin-btn">⚙ Admin</button>
+        <div class="carrito-icono">🛒 <span id="contador-carrito">0</span></div>
+    </div>
+</nav>
 
-            🛒 <span id="contador-carrito">0</span>
-
+<!-- CARRITO -->
+<div class="carrito-panel" id="carrito-panel">
+    <div class="carrito-header"><h2>🛒 Carrito</h2><span id="cerrar-carrito">✕</span></div>
+    <div id="items-carrito"></div>
+    <div class="cupon-box">
+        <input type="text" id="cupon-input" placeholder="Código de cupón...">
+        <button id="aplicar-cupon">Aplicar</button>
+    </div>
+    <div id="descuento-aviso" class="descuento-aviso" style="display:none;"></div>
+    <div class="carrito-footer">
+        <div class="envio-barra" id="envio-barra">
+            <div class="envio-barra-inner">
+                <div class="envio-barra-prog" id="envio-barra-prog"></div>
+            </div>
+            <p id="envio-barra-texto">Agrega productos para ver el progreso</p>
         </div>
-
-    </nav>
-
-    <!-- PANEL CARRITO -->
-
-    <div class="carrito-panel" id="carrito-panel">
-
-    <div class="carrito-header">
-
-        <h2>Carrito</h2>
-
-        <span id="cerrar-carrito">
-            ✕
-        </span>
-
-    </div>
-
-        <h2>Carrito</h2>
-
-        <div id="items-carrito"></div>
-
-        <div class="carrito-footer">
-
-            <h3>
-                Total: <span id="total">0</span> Bs
-            </h3>
-
-            <button id="finalizar-compra">
-                Finalizar Pedido
-            </button>
-
+        <div class="carrito-timer" id="carrito-timer" style="display:none;">
+            ⏱ Tu carrito expira en <strong id="timer-cuenta">15:00</strong>
         </div>
-
-    </div>
-
-    <!-- HERO -->
-
-    <section class="hero">
-
-        <div class="hero-content">
-
-            <h1>
-                FÚTBOL PREMIER
-            </h1>
-
-            <p>
-                Jerseys Originales y Retro
-            </p>
-
-            <a href="#catalogo">
-                VER CATÁLOGO
-            </a>
-
+        <div id="resumen-precios">
+            <p>Subtotal: <span id="subtotal">0</span> Bs</p>
+            <p id="linea-descuento" style="display:none;">Descuento: -<span id="descuento-monto">0</span> Bs</p>
+            <h3>Total: <span id="total">0</span> Bs</h3>
         </div>
-
-    </section>
-
-    <!-- PRODUCTO DESTACADO -->
-
-<section class="destacado">
-
-    <div class="destacado-img">
-
-        <img
-            src="WhatsApp Image 2026-05-18 at 8.21.49 PM.jpeg"
-            alt=""
-        >
-
+        <button id="finalizar-compra">Finalizar Pedido 💳</button>
+        <button id="ver-historial-btn" class="btn-historial">📋 Historial</button>
+        <button id="ver-favoritos-btn" class="btn-historial">❤️ Favoritos</button>
     </div>
+</div>
 
-    <div class="destacado-info">
-
-        <span>
-            🔥 PRODUCTO DESTACADO
-        </span>
-
-        <h2>
-            Manchester United 2008
-        </h2>
-
-        <p>
-            Temporada histórica de Cristiano Ronaldo.
-            Calidad retro version jugador.
-        </p>
-
-        <h3>
-            330 Bs
-        </h3>
-
-        <a href="#catalogo">
-            Comprar Ahora
-        </a>
-
+<!-- HERO SLIDER -->
+<section class="hero" id="inicio">
+    <div class="hero-slider" id="hero-slider">
+        <div class="hero-slide activo" style="background-image:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1600&auto=format&fit=crop')">
+            <div class="hero-content"><div class="hero-badge">⚽ Temporada 2026</div><h1>FÚTBOL PREMIER</h1><p>Jerseys</p><div class="hero-btns"><a href="#catalogo" class="btn-primary">VER CATÁLOGO</a><a href="#ofertas" class="btn-secondary">🔥 Ver Ofertas</a></div></div>
+        </div>
+        <div class="hero-slide" style="background-image:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1508098682722-e99c643e7f0a?q=80&w=1600&auto=format&fit=crop')">
+            <div class="hero-content"><div class="hero-badge">🔥 Ofertas Especiales</div><h1>HASTA 40% OFF</h1><p>En jerseys seleccionados</p><div class="hero-btns"><a href="#ofertas" class="btn-primary">VER OFERTAS</a></div></div>
+        </div>
+        <div class="hero-slide" style="background-image:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?q=80&w=1600&auto=format&fit=crop')">
+            <div class="hero-content"><div class="hero-badge">🚚 Envíos Bolivia</div><h1>PLAYER VERSION</h1><p>La misma calidad que usan los profesionales</p><div class="hero-btns"><a href="#catalogo" class="btn-primary">VER CATÁLOGO</a></div></div>
+        </div>
     </div>
-
+    <div class="hero-dots" id="hero-dots">
+        <span class="hero-dot activo" data-idx="0"></span>
+        <span class="hero-dot" data-idx="1"></span>
+        <span class="hero-dot" data-idx="2"></span>
+    </div>
+    <button class="hero-arrow hero-arrow-prev" id="hero-prev">❮</button>
+    <button class="hero-arrow hero-arrow-next" id="hero-next">❯</button>
 </section>
 
-    <!-- FILTROS -->
+<!-- DESTACADO -->
+<section class="destacado reveal">
+    <div class="destacado-img"><img src="img/MU.jpg" alt="Manchester United 2008"></div>
+    <div class="destacado-info">
+        <span>🔥 PRODUCTO DESTACADO</span>
+        <h2>Manchester United 2008</h2>
+        <p>Temporada histórica de Cristiano Ronaldo. Calidad retro versión jugador.</p>
+        <h3>330 Bs</h3>
+        <a href="#catalogo">Comprar Ahora</a>
+    </div>
+</section>
 
-    <section class="filtros">
+<!-- NOTIF COMPRA -->
+<div class="notif-compra" id="notif-compra" style="display:none;">
+    <span class="notif-icono">🔔</span><span id="notif-texto"></span>
+</div>
 
-        <button onclick="filtrarCategoria('todos')">
-            Todos
-        </button>
+<!-- OFERTAS -->
+<section class="seccion-ofertas" id="ofertas">
+    <div class="ofertas-header reveal"><h2>🔥 OFERTAS ESPECIALES</h2><p>Precios exclusivos por tiempo limitado</p></div>
+    <div class="catalogo ofertas-grid" id="catalogo-ofertas"></div>
+    <div class="sin-ofertas" id="sin-ofertas" style="display:none;"><p>No hay ofertas activas 😔</p></div>
+</section>
 
-        <button onclick="filtrarCategoria('clubes')">
-            Clubes
-        </button>
+<!-- POR QUÉ -->
+<section class="por-que" id="por-que">
+    <h2 class="reveal">¿Por qué elegirnos?</h2>
+    <div class="razones">
+        <div class="razon reveal"><div class="razon-icono">🚚</div><h3>Envíos a Bolivia</h3><p>Enviamos a todo el país rápido y seguro</p></div>
+        <div class="razon reveal"><div class="razon-icono">⭐</div><h3>Calidad Garantizada</h3><p>Jerseys originales y retro de la más alta calidad</p></div>
+        <div class="razon reveal"><div class="razon-icono">🔒</div><h3>Pago Seguro</h3><p>Pagos por QR o transferencia verificados</p></div>
+        <div class="razon reveal"><div class="razon-icono">💬</div><h3>Atención Directa</h3><p>Te atendemos por WhatsApp de inmediato</p></div>
+    </div>
+</section>
 
-        <button onclick="filtrarCategoria('retro')">
-            Retro
-        </button>
+<!-- CHAT FLOTANTE FAQ -->
+<div class="chat-faq" id="chat-faq" style="display:none;">
+    <div class="chat-header"><span>💬 Preguntas frecuentes</span><button id="chat-cerrar">✕</button></div>
+    <div class="chat-body" id="chat-body">
+        <div class="chat-msg bot">¡Hola! ¿En qué te puedo ayudar? 👋</div>
+        <div class="chat-opciones">
+            <button class="chat-opcion" data-resp="envio">🚚 ¿Cuánto tarda el envío?</button>
+            <button class="chat-opcion" data-resp="tallas">📏 ¿Cómo sé mi talla?</button>
+            <button class="chat-opcion" data-resp="pago">💳 ¿Cómo pago?</button>
+            <button class="chat-opcion" data-resp="calidad">⭐ ¿Son originales?</button>
+            <button class="chat-opcion" data-resp="whatsapp">📱 Hablar con un asesor</button>
+        </div>
+    </div>
+</div>
+<button class="chat-btn" id="chat-btn">💬</button>
 
-        <button onclick="filtrarCategoria('selecciones')">
-            Selecciones
-        </button>
+<!-- RESEÑAS -->
+<section class="resenas-seccion" id="resenas">
+    <h2 class="reveal">⭐ Reseñas de clientes</h2>
+    <div class="resenas-grid" id="resenas-grid"></div>
+    <div class="resena-form reveal">
+        <h3>¿Ya compraste con nosotros? Deja tu reseña</h3>
+        <input type="text" id="resena-nombre" placeholder="Tu nombre">
+        <input type="text" id="resena-ciudad" placeholder="Tu ciudad">
+        <div class="estrellas-input" id="estrellas-input">
+            <span class="estrella-inp" data-val="1">★</span>
+            <span class="estrella-inp" data-val="2">★</span>
+            <span class="estrella-inp" data-val="3">★</span>
+            <span class="estrella-inp" data-val="4">★</span>
+            <span class="estrella-inp" data-val="5">★</span>
+        </div>
+        <textarea id="resena-texto" placeholder="Cuéntanos tu experiencia..." rows="3"></textarea>
+        <button id="enviar-resena">Enviar Reseña</button>
+        <p class="resena-nota">Tu reseña será revisada antes de publicarse.</p>
+    </div>
+</section>
 
-        <button onclick="filtrarCategoria('player')">
-            Player Version
-        </button>
+<!-- NOSOTROS -->
+<section class="nosotros" id="nosotros">
+    <div class="nosotros-contenido reveal">
+        <span class="nosotros-tag">🏆 Nuestra Historia</span>
+        <h2>Nacimos por pasión al fútbol</h2>
+        <p>Fútbol Premier nació en 2024 con una misión: llevar los mejores jerseys a cada rincón de Bolivia.</p>
+        <p>Trabajamos con proveedores certificados para garantizar la más alta calidad en cada jersey.</p>
+        <div class="nosotros-stats">
+            <div class="stat"><h3>+700</h3><p>Clientes felices</p></div>
+            <div class="stat"><h3>+200</h3><p>Modelos distintos</p></div>
+            <div class="stat"><h3>2</h3><p>Años de experiencia</p></div>
+        </div>
+    </div>
+</section>
 
-    </section>
-
-    <!-- PANEL ADMIN -->
-
-    <section class="admin" id="admin-panel">
-
-        <h2>Agregar Jersey</h2>
-
-        <input
-            type="file"
-            id="imagen"
-            multiple
-        >
-
-        <input
-            type="text"
-            id="nombre"
-            placeholder="Nombre del jersey"
-        >
-
-        <input
-            type="text"
-            id="tallas"
-            placeholder="Tallas disponibles"
-        >
-
-        <input
-            type="text"
-            id="dorsales"
-            placeholder="Dorsales"
-        >
-
-        <input
-            type="text"
-            id="calidad"
-            placeholder="Calidad"
-        >
-
-        <select id="categoria">
-
-            <option value="clubes">
-                Clubes
-            </option>
-
-            <option value="retro">
-                Retro
-            </option>
-
-            <option value="selecciones">
-                Selecciones
-            </option>
-
-            <option value="player">
-                Player Version
-            </option>
-
+<!-- FILTROS -->
+<div class="filtros" id="filtros-seccion">
+    <h2 class="titulo-filtros reveal">Catálogo Completo</h2>
+    <!-- BANNER CATEGORÍA -->
+    <div class="banner-categoria" id="banner-categoria" style="display:none;">
+        <div class="banner-cat-content" id="banner-cat-content"></div>
+    </div>
+    <div class="filtros-box">
+        <label class="filtro-item"><input type="checkbox" class="filtro-check" value="clubes"> Clubes</label>
+        <label class="filtro-item"><input type="checkbox" class="filtro-check" value="retro"> Retro</label>
+        <label class="filtro-item"><input type="checkbox" class="filtro-check" value="selecciones"> Selecciones</label>
+        <label class="filtro-item"><input type="checkbox" class="filtro-check" value="player"> Player Version</label>
+    </div>
+    <!-- RANGO PRECIO -->
+    <div class="rango-precio">
+        <label>Precio: <strong id="rango-valor">0 – 1000 Bs</strong></label>
+        <div class="range-wrap">
+            <input type="range" id="precio-min" min="0" max="1000" value="0" step="10">
+            <input type="range" id="precio-max" min="0" max="1000" value="1000" step="10">
+        </div>
+    </div>
+    <div class="ordenar-box">
+        <select id="ordenar">
+            <option value="">Ordenar por...</option>
+            <option value="menor">Precio: Menor a Mayor</option>
+            <option value="mayor">Precio: Mayor a Menor</option>
+            <option value="oferta">Solo Ofertas</option>
+            <option value="vendidos">Más vendidos</option>
+            <option value="agotado">Ocultar Agotados</option>
         </select>
-
-        <input
-            type="number"
-            id="precio"
-            placeholder="Precio"
-        >
-
-        <button onclick="agregarProducto()">
-            Agregar Jersey
-        </button>
-
-    </section>
-
-    <!-- CATÁLOGO -->
-
-    <section
-        class="catalogo"
-        id="catalogo"
-    >
-
-    </section>
-
-    <!-- MODAL -->
-
-    <div class="modal" id="modal">
-
-        <span class="cerrar">
-            &times;
-        </span>
-
-        <img
-            class="modal-img"
-            id="modal-img"
-        >
-
     </div>
-<!-- FOOTER -->
+</div>
 
-<footer class="footer">
+<!-- SKELETON -->
+<div class="skeleton-grid" id="skeleton-grid">
+    <div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line sk-short"></div><div class="sk-line sk-btn"></div></div>
+    <div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line sk-short"></div><div class="sk-line sk-btn"></div></div>
+    <div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line sk-short"></div><div class="sk-line sk-btn"></div></div>
+</div>
 
-    <div class="footer-logo">
+<!-- CATÁLOGO -->
+<section class="catalogo" id="catalogo"></section>
 
-        <img
-            src="img/logo.png"
-            alt="Fútbol Premier"
-        >
+<!-- COMPARAR BARRA -->
+<div class="comparar-barra" id="comparar-barra" style="display:none;">
+    <div id="comparar-items"></div>
+    <button id="btn-comparar">⚖️ Comparar</button>
+    <button id="btn-limpiar-comparar">✕ Limpiar</button>
+</div>
 
-        <h2>
-            FÚTBOL PREMIER
-        </h2>
-
+<!-- PANEL ADMIN -->
+<section class="admin" id="admin-panel" style="display:none;">
+    <h2>⚽ Panel Administrador</h2>
+    <div class="admin-stats" id="admin-stats"></div>
+    <div class="admin-tabs">
+        <button class="atab activo" data-tab="agregar">➕ Agregar</button>
+        <button class="atab" data-tab="editar">✏️ Gestionar</button>
+        <button class="atab" data-tab="cupones">🎟 Cupones</button>
+        <button class="atab" data-tab="resenas-admin">⭐ Reseñas</button>
     </div>
-
-    <p class="footer-text">
-
-        Vive el fútbol con los mejores jerseys
-        originales y retro ⚽
-
-    </p>
-
-    <div class="footer-redes">
-
-        <a
-            href="https://wa.me/59171208827"
-            target="_blank"
-        >
-            WhatsApp
-        </a>
-
-        <a href="https://www.instagram.com/futbol.premier_10?igsh=NmY4eGVhdW1ydmlz">
-            Instagram
-        </a>
-
-        <a href="https://www.tiktok.com/@ftbol_premier?_r=1&_t=ZS-96WnfVoo2ZY">
-            TikTok
-        </a>
-
-    
-
+    <div class="admin-tab-content activo" id="tab-agregar">
+        <input type="file" id="imagen" multiple accept="image/*,video/*">
+        <div id="preview-imagenes" class="preview-imagenes-grid"></div>
+        <input type="text" id="img-url" placeholder="O pega una URL de imagen (opcional)">
+        <input type="text" id="nombre" placeholder="Nombre del jersey">
+        <div class="tallas-check-wrap">
+            <label class="tallas-check-titulo">Tallas disponibles:</label>
+            <div class="tallas-check-grid">
+                <label class="talla-check-item"><input type="checkbox" class="talla-check" value="S"> S</label>
+                <label class="talla-check-item"><input type="checkbox" class="talla-check" value="M"> M</label>
+                <label class="talla-check-item"><input type="checkbox" class="talla-check" value="L"> L</label>
+                <label class="talla-check-item"><input type="checkbox" class="talla-check" value="XL"> XL</label>
+                <label class="talla-check-item"><input type="checkbox" class="talla-check" value="XXL"> XXL</label>
+            </div>
+            <input type="text" id="tallas" placeholder="O escribe tallas personalizadas (ej: S,M,L,XL)" style="margin-top:8px;">
+        </div>
+        <input type="text" id="dorsales" placeholder="Dorsales (ej: 7,10,cualquiera)">
+        <input type="text" id="calidad" placeholder="Calidad (ej: AAA, Player Version)">
+        <input type="text" id="colores" placeholder="Colores disponibles (ej: Rojo,Azul,Blanco)">
+        <textarea id="descripcion" placeholder="Descripción larga..." rows="3"></textarea>
+        <select id="categoria">
+            <option value="clubes">Clubes</option>
+            <option value="retro">Retro</option>
+            <option value="selecciones">Selecciones</option>
+            <option value="player">Player Version</option>
+        </select>
+        <input type="number" id="precio" placeholder="Precio en Bs">
+        <input type="number" id="vendidos" placeholder="Unidades vendidas (opcional)">
+        <div class="oferta-admin">
+            <label class="oferta-toggle-label"><input type="checkbox" id="es-oferta"> 🔥 ¿Es oferta?</label>
+            <div id="campo-precio-original" style="display:none;">
+                <input type="number" id="precio-original" placeholder="Precio original (tachado)">
+                <input type="text" id="fin-oferta" placeholder="Fin oferta (ej: 2026-07-01T23:59)">
+            </div>
+        </div>
+        <input type="number" id="stock" placeholder="Stock disponible">
+        <button onclick="agregarProducto()">➕ Agregar Jersey</button>
     </div>
+    <div class="admin-tab-content" id="tab-editar"><div id="lista-admin"></div></div>
+    <div class="admin-tab-content" id="tab-cupones">
+        <input type="text" id="cupon-codigo" placeholder="Código (ej: PREMIER10)">
+        <input type="number" id="cupon-descuento" placeholder="% de descuento">
+        <button onclick="crearCupon()">🎟 Crear Cupón</button>
+        <div id="lista-cupones"></div>
+    </div>
+    <div class="admin-tab-content" id="tab-resenas-admin"><div id="resenas-pendientes"></div></div>
+    <button onclick="cerrarAdmin()" class="btn-cerrar-admin">🚪 Cerrar Sesión</button>
+</section>
 
-    <p class="copy">
+<!-- MODAL EDITAR -->
+<div class="editar-modal" id="editar-modal">
+    <div class="editar-contenido">
+        <button class="editar-cerrar" id="editar-cerrar">✕</button>
+        <h2>✏️ Editar Jersey</h2>
+        <input type="hidden" id="edit-id">
+        <input type="text" id="edit-nombre" placeholder="Nombre">
+        <input type="text" id="edit-tallas" placeholder="Tallas">
+        <input type="text" id="edit-dorsales" placeholder="Dorsales">
+        <input type="text" id="edit-calidad" placeholder="Calidad">
+        <input type="text" id="edit-colores" placeholder="Colores">
+        <textarea id="edit-descripcion" rows="3" placeholder="Descripción"></textarea>
+        <select id="edit-categoria">
+            <option value="clubes">Clubes</option><option value="retro">Retro</option>
+            <option value="selecciones">Selecciones</option><option value="player">Player Version</option>
+        </select>
+        <input type="number" id="edit-precio" placeholder="Precio en Bs">
+        <input type="number" id="edit-stock" placeholder="Stock">
+        <input type="number" id="edit-vendidos" placeholder="Vendidos">
+        <label class="oferta-toggle-label"><input type="checkbox" id="edit-es-oferta"> 🔥 ¿Es oferta?</label>
+        <div id="edit-campo-oferta" style="display:none;">
+            <input type="number" id="edit-precio-original" placeholder="Precio original">
+            <input type="text" id="edit-fin-oferta" placeholder="Fin oferta">
+        </div>
+        <button onclick="guardarEdicion()">💾 Guardar Cambios</button>
+    </div>
+</div>
 
-        © 2026 Fútbol Premier - Todos los derechos reservados
+<!-- MODAL SELECCIONAR TALLA (desde card) -->
+<div id="talla-selector-modal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:22px;padding:28px;width:90%;max-width:440px;max-height:90vh;overflow-y:auto;position:relative;animation:aparecer .3s ease;">
+        <button id="talla-sel-cerrar" style="position:absolute;top:13px;right:17px;background:var(--bg3);border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:50%;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
 
-    </p>
-
-</footer>
-<div id="toast"></div>
-<!-- MODAL PAGO -->
-
-<div class="pago-modal" id="pago-modal">
-
-    <div class="pago-contenido">
-
-        <span id="cerrar-pago">
-            ✕
-        </span>
-
-        <h2>
-            Finalizar Compra
-        </h2>
-
-        <p class="pago-total">
-            Total:
-            <span id="total-pago">
-                0
-            </span>
-            Bs
-        </p>
-
-        <img
-            src="img/qr1.jpg"
-            class="qr-img"
-        >
-
-        <div class="datos-pago">
-
-            <h3>
-                Pago por Transferencia
-            </h3>
-
-            <p>
-                Banco: MERCANTIL SCZ
-            </p>
-
-            <p>
-                Cuenta: 1016631325
-            </p>
-
-            <p>
-                Titular: Rodrigo Franco Navia Rojas
-            </p>
-
+        <!-- Header producto -->
+        <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+            <img id="talla-sel-img" src="" alt="" style="width:75px;height:75px;object-fit:cover;border-radius:11px;flex-shrink:0;">
+            <div>
+                <h2 id="talla-sel-nombre" style="font-size:1.05rem;margin-bottom:6px;"></h2>
+                <div id="talla-sel-precio"></div>
+                <div id="talla-sel-visores"></div>
+            </div>
         </div>
 
-        <button id="enviar-whatsapp">
+        <!-- Tallas -->
+        <div style="margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <label style="font-size:.8rem;color:var(--text3);font-weight:bold;letter-spacing:1px;">TALLA <span style="color:#ff4444;">*</span></label>
+                <button id="btn-guia-tallas2" style="background:none;border:1px solid var(--border);color:var(--text3);padding:4px 10px;border-radius:8px;cursor:pointer;font-size:.74rem;">📏 Guía de tallas</button>
+            </div>
+            <div id="talla-sel-btns" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+            <p id="talla-sel-error" style="display:none;color:#ff4444;font-size:.78rem;margin-top:6px;">⚠️ Por favor selecciona una talla</p>
+        </div>
 
-            Ya pagué / Enviar Pedido
+        <!-- Dorsales -->
+        <div style="margin-bottom:16px;">
+            <label style="display:block;font-size:.8rem;color:var(--text3);font-weight:bold;letter-spacing:1px;margin-bottom:10px;">DORSAL <span style="color:#ff4444;">*</span></label>
+            <div id="dorsal-sel-btns" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+            <p id="dorsal-sel-error" style="display:none;color:#ff4444;font-size:.78rem;margin-top:6px;">⚠️ Por favor selecciona un dorsal</p>
+        </div>
 
-        </button>
+        <!-- Color (opcional) -->
+        <div id="color-sel-wrap" style="display:none;margin-bottom:16px;">
+            <label style="display:block;font-size:.8rem;color:var(--text3);font-weight:bold;letter-spacing:1px;margin-bottom:10px;">COLOR</label>
+            <div id="color-sel-btns" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        </div>
 
+        <!-- Stock aviso -->
+        <p id="talla-sel-stock" style="display:none;color:#ff4444;font-weight:bold;font-size:.84rem;margin-bottom:12px;"></p>
+
+        <!-- Garantías -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;padding:10px;background:var(--bg3);border-radius:10px;margin-bottom:14px;">
+            <span style="font-size:.74rem;color:var(--text2);">🔒 Pago seguro</span>
+            <span style="font-size:.74rem;color:var(--text2);">🚚 Envío a Bolivia</span>
+            <span style="font-size:.74rem;color:var(--text2);">⭐ Calidad garantizada</span>
+        </div>
+
+        <!-- Botones -->
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+            <button id="talla-sel-agregar" style="flex:1;padding:13px;border:none;border-radius:11px;background:var(--text);color:var(--bg);font-weight:bold;font-size:.9rem;cursor:pointer;">🛒 Agregar al carrito</button>
+            <button id="talla-sel-comprar-ya" style="flex:1;padding:13px;border:none;border-radius:11px;background:linear-gradient(135deg,#ff6600,#ff0000);color:#fff;font-weight:bold;font-size:.9rem;cursor:pointer;">⚡ Comprar ahora</button>
+        </div>
+        <button id="talla-sel-wsp" style="width:100%;padding:11px;border:1px solid #25D366;border-radius:11px;background:transparent;color:#25D366;font-weight:bold;font-size:.84rem;cursor:pointer;">💬 Consultar por WhatsApp</button>
     </div>
-
 </div>
 
-<!-- LOGIN ADMIN -->
+<!-- POPUP SALIDA -->
+<div class="exit-popup" id="exit-popup">
+    <div class="exit-contenido">
+        <button class="exit-cerrar" id="exit-cerrar">✕</button>
+        <div class="exit-icono">🎁</div>
+        <h2>¡Espera! Tenemos una oferta para ti</h2>
+        <p>Antes de irte, usa este cupón y obtén <strong>10% de descuento</strong> en tu primer pedido</p>
+        <div class="exit-cupon">PREMIER10</div>
+        <button class="exit-btn" id="exit-btn">Ver ofertas ahora</button>
+        <p class="exit-nota">Válido por tiempo limitado</p>
+    </div>
+</div>
 
-<div class="login-modal" id="login-modal">
+<!-- MODAL GUÍA TALLAS -->
+<div class="talla-guia-modal" id="talla-guia-modal">
+    <div class="talla-guia-contenido">
+        <button class="talla-guia-cerrar" id="talla-guia-cerrar">✕</button>
+        <h2>📏 Guía de Tallas</h2>
+        <table class="tabla-tallas">
+            <thead><tr><th>Talla</th><th>Pecho (cm)</th><th>Largo (cm)</th><th>Hombros (cm)</th></tr></thead>
+            <tbody>
+                <tr><td><strong>S</strong></td><td>88–96</td><td>68</td><td>42</td></tr>
+                <tr><td><strong>M</strong></td><td>96–104</td><td>70</td><td>44</td></tr>
+                <tr><td><strong>L</strong></td><td>104–112</td><td>72</td><td>46</td></tr>
+                <tr><td><strong>XL</strong></td><td>112–120</td><td>74</td><td>48</td></tr>
+                <tr><td><strong>XXL</strong></td><td>120–128</td><td>76</td><td>50</td></tr>
+            </tbody>
+        </table>
+        <p class="talla-nota">💡 Si dudas entre dos tallas, elige la más grande.</p>
+    </div>
+</div>
 
+<!-- MODAL COMPARAR -->
+<div class="comparar-modal" id="comparar-modal">
+    <div class="comparar-contenido">
+        <button class="comparar-cerrar" id="comparar-cerrar">✕</button>
+        <h2>⚖️ Comparar Jerseys</h2>
+        <div class="comparar-grid" id="comparar-grid"></div>
+    </div>
+</div>
+
+<!-- VISOR GALERÍA -->
+<div class="galeria-modal" id="galeria-modal">
+    <div class="galeria-overlay"></div>
+    <button class="galeria-cerrar" id="galeria-cerrar">✕</button>
+    <button class="galeria-flecha galeria-prev" id="galeria-prev">&#10094;</button>
+    <div class="galeria-contenido">
+        <img class="galeria-img" id="galeria-img" src="" alt="">
+        <div class="galeria-contador" id="galeria-contador">1 / 1</div>
+    </div>
+    <button class="galeria-flecha galeria-next" id="galeria-next">&#10095;</button>
+    <div class="galeria-thumbs" id="galeria-thumbs"></div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="detalle-modal" id="detalle-modal">
+    <div class="detalle-overlay" id="detalle-overlay"></div>
+    <div class="detalle-contenido">
+        <button class="detalle-cerrar" id="detalle-cerrar">✕</button>
+        <div class="detalle-body">
+            <div class="detalle-galeria">
+                <div class="zoom-wrap">
+                    <img class="detalle-img-principal" id="detalle-img-principal" src="" alt="">
+                    <div class="zoom-lupa" id="zoom-lupa"></div>
+                </div>
+                <div class="detalle-thumbs" id="detalle-thumbs"></div>
+            </div>
+            <div class="detalle-info">
+                <div id="detalle-badges"></div>
+                <h2 id="detalle-nombre"></h2>
+                <div id="detalle-visitas" class="detalle-visitas"></div>
+                <div id="detalle-vendidos" class="detalle-vendidos"></div>
+                <div id="detalle-precio"></div>
+                <div id="detalle-countdown" class="detalle-countdown" style="display:none;"></div>
+                <p id="detalle-descripcion" class="detalle-desc"></p>
+                <div class="detalle-campo">
+                    <div class="talla-label-row">
+                        <label>Talla: <span class="campo-req">*</span></label>
+                        <button class="btn-guia-tallas" id="btn-guia-tallas">📏 Guía</button>
+                    </div>
+                    <div class="tallas-btns" id="tallas-btns"></div>
+                </div>
+                <div class="detalle-campo"><label>Dorsal: <span class="campo-req">*</span></label><div class="dorsales-btns" id="dorsales-btns"></div></div>
+                <div class="detalle-campo" id="colores-campo" style="display:none;"><label>Color:</label><div class="colores-btns" id="colores-btns"></div></div>
+                <p id="detalle-stock-aviso" class="stock-aviso" style="display:none;"></p>
+                <div class="detalle-acciones">
+                    <button class="detalle-agregar" id="detalle-agregar">🛒 Agregar al carrito</button>
+                    <button class="detalle-fav" id="detalle-fav">🤍</button>
+                    <button class="detalle-compartir" id="detalle-compartir">📤</button>
+                </div>
+                <div class="tambien-gusta" id="tambien-gusta"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL FAVORITOS -->
+<div class="favoritos-modal" id="favoritos-modal">
+    <div class="favoritos-contenido">
+        <button class="favoritos-cerrar" id="favoritos-cerrar">✕</button>
+        <h2>❤️ Mis Favoritos</h2>
+        <div id="favoritos-lista"></div>
+    </div>
+</div>
+
+<!-- MODAL CONFIRMACIÓN -->
+<div class="confirmacion-modal" id="confirmacion-modal">
+    <div class="confirmacion-contenido">
+        <div class="confirmacion-icono">🎉</div>
+        <h2>¡Pedido Enviado!</h2>
+        <p class="conf-numero">Pedido <strong id="conf-numero-pedido">#0000</strong></p>
+        <p class="conf-texto">Tu pedido fue enviado por WhatsApp. Te contactaremos a la brevedad.</p>
+        <div class="conf-resumen" id="conf-resumen"></div>
+        <button id="conf-cerrar">✓ Entendido</button>
+    </div>
+</div>
+
+<!-- HISTORIAL -->
+<div class="historial-modal" id="historial-modal">
+    <div class="historial-contenido">
+        <button class="historial-cerrar" id="historial-cerrar">✕</button>
+        <h2>📋 Historial de Pedidos</h2>
+        <div id="historial-lista"></div>
+    </div>
+</div>
+
+<!-- MODAL PAGO -->
+<div class="pago-modal" id="pago-modal">
+    <div class="pago-contenido">
+        <span id="cerrar-pago">✕</span>
+        <h2>💳 Finalizar Compra</h2>
+        <!-- RESUMEN CON TALLAS -->
+        <div class="pago-resumen" id="pago-resumen"></div>
+        <!-- RESUMEN ENTREGAS RÁPIDO -->
+        <div class="pago-entregas-resumen">
+            <h4>📦 Opciones de entrega disponibles</h4>
+            <div class="pago-entregas-grid">
+                <div class="pago-entrega-item">
+                    <span class="pe-icono">🏙️</span>
+                    <div>
+                        <strong>La Paz</strong>
+                        <p>San Francisco 15:00 · Correos 15:30 · Teleférico 16:00</p>
+                    </div>
+                </div>
+                <div class="pago-entrega-item">
+                    <span class="pe-icono">🌆</span>
+                    <div>
+                        <strong>El Alto</strong>
+                        <p>Teleférico 16:45 · Terminal 17:15 · Villa Adela 17:15</p>
+                    </div>
+                </div>
+                <div class="pago-entrega-item">
+                    <span class="pe-icono">🇧🇴</span>
+                    <div>
+                        <strong>Envíos Nacionales</strong>
+                        <p>Cochabamba, SCZ, Tarija, Oruro y más — desde 10 Bs</p>
+                    </div>
+                </div>
+                <div class="pago-entrega-item">
+                    <span class="pe-icono">🛵</span>
+                    <div>
+                        <strong>Delivery</strong>
+                        <p>A domicilio en La Paz y El Alto — 10 a 15 Bs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SELECTOR ENTREGA/ENVÍO -->
+        <div class="envio-selector">
+            <h4>🚚 ¿Cómo quieres recibir tu pedido?</h4>
+            <div class="envio-opciones">
+                <label class="envio-opcion" id="op-lapaz">
+                    <input type="radio" name="tipo-envio" value="lapaz"> 🏙️ Entrega en La Paz
+                </label>
+                <label class="envio-opcion" id="op-elalto">
+                    <input type="radio" name="tipo-envio" value="elalto"> 🌆 Entrega en El Alto
+                </label>
+                <label class="envio-opcion" id="op-nacional">
+                    <input type="radio" name="tipo-envio" value="nacional"> 🇧🇴 Envío Nacional
+                </label>
+                <label class="envio-opcion" id="op-delivery">
+                    <input type="radio" name="tipo-envio" value="delivery"> 🛵 Delivery a domicilio
+                </label>
+            </div>
+
+            <!-- DETALLE LA PAZ -->
+            <div class="envio-detalle" id="detalle-lapaz" style="display:none;">
+                <select id="punto-lapaz">
+                    <option value="">Elige punto de entrega...</option>
+                    <option value="San Francisco — 15:00 pm">📍 San Francisco — 15:00 pm</option>
+                    <option value="Correos — 15:30 pm">📍 Correos — 15:30 pm</option>
+                    <option value="Teleférico Morado — 16:00 pm">📍 Teleférico Morado (La Paz) — 16:00 pm</option>
+                </select>
+            </div>
+
+            <!-- DETALLE EL ALTO -->
+            <div class="envio-detalle" id="detalle-elalto" style="display:none;">
+                <select id="punto-elalto">
+                    <option value="">Elige punto de entrega...</option>
+                    <option value="Teleférico Morado Faro Murillo — 16:45 pm">📍 Teleférico Morado Faro Murillo — 16:45 pm</option>
+                    <option value="Teleférico Morado 6 de Marzo — 16:45 pm">📍 Teleférico Morado 6 de Marzo — 16:45 pm</option>
+                    <option value="Terminal Metropolitana — 17:15 pm">📍 Terminal Metropolitana — 17:15 pm</option>
+                    <option value="Cruce Villa Adela — 17:15 pm">📍 Cruce Villa Adela — 17:15 pm</option>
+                </select>
+            </div>
+
+            <!-- DETALLE NACIONAL -->
+            <div class="envio-detalle" id="detalle-nacional" style="display:none;">
+                <select id="ciudad-nacional">
+                    <option value="">Elige tu ciudad...</option>
+                    <option value="Cochabamba — 10 Bs">📦 Cochabamba — 10 Bs</option>
+                    <option value="Santa Cruz — 10 Bs">📦 Santa Cruz — 10 Bs</option>
+                    <option value="Tarija — 10 Bs">📦 Tarija — 10 Bs</option>
+                    <option value="Oruro — 10 Bs">📦 Oruro — 10 Bs</option>
+                    <option value="Potosí — 10 Bs">📦 Potosí — 10 Bs</option>
+                    <option value="Sucre — 10 Bs">📦 Sucre — 10 Bs</option>
+                    <option value="Beni — 15 Bs">📦 Beni — 15 Bs</option>
+                    <option value="Cobija — 15 Bs">📦 Cobija — 15 Bs</option>
+                    <option value="Otra ciudad — consultar">📦 Otra ciudad (consultar)</option>
+                </select>
+            </div>
+
+            <!-- DETALLE DELIVERY -->
+            <div class="envio-detalle" id="detalle-delivery" style="display:none;">
+                <input type="text" id="direccion-delivery" placeholder="Tu dirección completa...">
+                <p class="delivery-nota">🛵 Costo: 10–15 Bs según distancia. Te confirmamos el precio por WhatsApp.</p>
+            </div>
+        </div>
+
+        <p class="pago-total">Total: <span id="total-pago">0</span> Bs <span id="costo-envio-badge" class="costo-envio-badge" style="display:none;"></span></p>
+        <img src="img/qr1.jpg" class="qr-img">
+        <div class="datos-pago">
+            <h3>Pago por Transferencia</h3>
+            <p>Banco: MERCANTIL SCZ</p><p>Cuenta: 1016631325</p>
+            <p>Titular: Rodrigo Franco Navia Rojas</p>
+        </div>
+        <!-- CAMPO REFERENCIA -->
+        <div class="voucher-seccion">
+            <label class="voucher-label">📋 Número de referencia / transacción (opcional)</label>
+            <input type="text" id="num-referencia" placeholder="Ej: 123456789">
+        </div>
+
+        <!-- INSTRUCCIÓN VOUCHER -->
+        <div class="voucher-instruccion">
+            <div class="voucher-paso">
+                <span class="voucher-num">1</span>
+                <p>Haz tu pago por QR o transferencia</p>
+            </div>
+            <div class="voucher-paso">
+                <span class="voucher-num">2</span>
+                <p>Toca el botón de abajo — se abrirá WhatsApp con tu pedido listo</p>
+            </div>
+            <div class="voucher-paso">
+                <span class="voucher-num">3</span>
+                <p><strong>Adjunta la foto de tu voucher</strong> en WhatsApp antes de enviar el mensaje</p>
+            </div>
+        </div>
+        <div class="voucher-alerta">
+            📸 <strong>Importante:</strong> Sin comprobante no podemos confirmar tu pedido
+        </div>
+
+        <button id="enviar-whatsapp">📱 Ya pagué — Enviar pedido + voucher</button>
+    </div>
+</div>
+
+<!-- LOGIN -->
+<div class="login-modal" id="login-modal" style="display:none;">
     <div class="login-box">
-
-        <h2>
-            Panel Administrador
-        </h2>
-
-        <input
-            type="password"
-            id="admin-password"
-            placeholder="Contraseña"
-        >
-
-        <button id="login-btn">
-            Ingresar
-        </button>
-
+        <h2>🔐 Panel Administrador</h2>
+        <input type="password" id="admin-password" placeholder="Contraseña">
+        <button id="login-btn">Ingresar</button>
     </div>
-
 </div>
 
-    <script src="script.js"></script>
 
+<!-- SECCIÓN ENTREGAS Y ENVÍOS -->
+<section class="entregas-seccion" id="entregas">
+    <div class="entregas-header reveal">
+        <h2>📦 Entregas y Envíos</h2>
+        <p>Elige la opción más cómoda para recibir tu jersey</p>
+    </div>
+    <div class="entregas-grid">
+
+        <!-- LA PAZ -->
+        <div class="entrega-card reveal">
+            <div class="entrega-ciudad-header">
+                <span class="entrega-icono">🏙️</span>
+                <div>
+                    <h3>Entregas La Paz</h3>
+                    <span class="entrega-precio-tag">Delivery 10–15 Bs</span>
+                </div>
+            </div>
+            <ul class="entrega-lista">
+                <li>
+                    <span class="entrega-punto">📍 San Francisco</span>
+                    <span class="entrega-hora">15:00 pm</span>
+                </li>
+                <li>
+                    <span class="entrega-punto">📍 Correos</span>
+                    <span class="entrega-hora">15:30 pm</span>
+                </li>
+                <li>
+                    <span class="entrega-punto">📍 Teleférico Morado (Ciudad de La Paz)</span>
+                    <span class="entrega-hora">16:00 pm</span>
+                </li>
+            </ul>
+            <div class="entrega-nota">🛵 Delivery a domicilio disponible</div>
+        </div>
+
+        <!-- EL ALTO -->
+        <div class="entrega-card reveal">
+            <div class="entrega-ciudad-header">
+                <span class="entrega-icono">🌆</span>
+                <div>
+                    <h3>Entregas El Alto</h3>
+                    <span class="entrega-precio-tag">Delivery 10–15 Bs</span>
+                </div>
+            </div>
+            <ul class="entrega-lista">
+                <li>
+                    <span class="entrega-punto">📍 Teleférico Morado (Faro Murillo o 6 de Marzo)</span>
+                    <span class="entrega-hora">16:45 pm</span>
+                </li>
+                <li>
+                    <span class="entrega-punto">📍 Terminal Metropolitana</span>
+                    <span class="entrega-hora">17:15 pm</span>
+                </li>
+                <li>
+                    <span class="entrega-punto">📍 Cruce Villa Adela</span>
+                    <span class="entrega-hora">17:15 pm</span>
+                </li>
+            </ul>
+            <div class="entrega-nota">🛵 Delivery a domicilio disponible</div>
+        </div>
+
+        <!-- ENVÍOS NACIONALES -->
+        <div class="entrega-card entrega-nacional reveal">
+            <div class="entrega-ciudad-header">
+                <span class="entrega-icono">🇧🇴</span>
+                <div>
+                    <h3>Envíos Nacionales</h3>
+                    <span class="entrega-precio-tag">Desde 10 Bs</span>
+                </div>
+            </div>
+            <div class="envios-grid">
+                <div class="envio-ciudad"><span>📦 Cochabamba</span><span class="envio-precio">10 Bs</span></div>
+                <div class="envio-ciudad"><span>📦 Santa Cruz</span><span class="envio-precio">10 Bs</span></div>
+                <div class="envio-ciudad"><span>📦 Tarija</span><span class="envio-precio">10 Bs</span></div>
+                <div class="envio-ciudad"><span>📦 Oruro</span><span class="envio-precio">10 Bs</span></div>
+                <div class="envio-ciudad"><span>📦 Potosí</span><span class="envio-precio">10 Bs</span></div>
+                <div class="envio-ciudad"><span>📦 Sucre</span><span class="envio-precio">10 Bs</span></div>
+                <div class="envio-ciudad"><span>📦 Beni</span><span class="envio-precio">15 Bs</span></div>
+                <div class="envio-ciudad"><span>📦 Cobija</span><span class="envio-precio">15 Bs</span></div>
+            </div>
+            <div class="entrega-nota">📞 Otras ciudades: consultar por WhatsApp</div>
+        </div>
+
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" id="footer">
+    <div class="footer-logo"><img src="img/logo.png" alt="Fútbol Premier"><h2>FÚTBOL PREMIER</h2></div>
+    <p class="footer-text">Vive el fútbol con los mejores jerseys ⚽</p>
+    <div class="footer-redes">
+        <a href="https://wa.me/59171208827" target="_blank">📱 WhatsApp</a>
+        <a href="https://www.instagram.com/futbol.premier_10" target="_blank">📸 Instagram</a>
+        <a href="https://www.tiktok.com/@ftbol_premier" target="_blank">🎵 TikTok</a>
+    </div>
+    <p class="copy">© 2026 Fútbol Premier - Todos los derechos reservados</p>
+</footer>
+
+<div id="toast"></div>
+<a href="https://wa.me/59171208827" target="_blank" class="whatsapp-flotante">💬</a>
+<button class="volver-arriba" id="volver-arriba">↑</button>
+
+<script src="script.js"></script>
 </body>
 </html>
